@@ -19,3 +19,5 @@ application/logs/*
 /nbproject/
 /Administrator+Kodepos/
 /Administrator+Pensiunan/
+/application/sessions/
+/application/cache/
