@@ -11,37 +11,20 @@ class Salesarea extends CI_Controller {
     }
 
     function index() {
-        if ($this->result[0]->hak_akses == 1) {
-            $data = [
-                'title' => 'SUPER Administrator | ' . $this->result[0]->uname,
-                'formtitle' => 'data sales area',
-                'id' => $this->result[0]->id,
-                'uname' => $this->result[0]->uname,
-                'usr_mail' => $this->result[0]->usr_mail,
-                'hak_akses' => $this->result[0]->hak_akses,
-                'pict' => $this->result[0]->pict,
-                'prov' => $this->M_Salesarea->Provinsi(),
-                'kab' => $this->M_Salesarea->Kabupaten(),
-                'kec' => $this->M_Salesarea->Kecamatan(),
-                'kel' => $this->M_Salesarea->Kelurahan(),
-                'salesarea' => $this->M_Salesarea->MSalesarea($this->result[0]->nik)
-            ];
-        } else {
-            $data = [
-                'title' => 'Administrator | ' . $this->result[0]->uname,
-                'formtitle' => 'data sales area',
-                'id' => $this->result[0]->id,
-                'uname' => $this->result[0]->uname,
-                'usr_mail' => $this->result[0]->usr_mail,
-                'hak_akses' => $this->result[0]->hak_akses,
-                'pict' => $this->result[0]->pict,
-                'prov' => $this->M_Salesarea->Provinsi(),
-                'kab' => $this->M_Salesarea->Kabupaten(),
-                'kec' => $this->M_Salesarea->Kecamatan(),
-                'kel' => $this->M_Salesarea->Kelurahan(),
-                'salesarea' => $this->M_Salesarea->Salesarea($this->result[0]->nik)
-            ];
-        }
+        $data = [
+            'title' => 'SUPER Administrator | ' . $this->result[0]->uname,
+            'formtitle' => 'data sales area',
+            'id' => $this->result[0]->id,
+            'uname' => $this->result[0]->uname,
+            'usr_mail' => $this->result[0]->usr_mail,
+            'hak_akses' => $this->result[0]->hak_akses,
+            'pict' => $this->result[0]->pict,
+            'prov' => $this->M_Salesarea->Provinsi(),
+            'kab' => $this->M_Salesarea->Kabupaten(),
+            'kec' => $this->M_Salesarea->Kecamatan(),
+            'kel' => $this->M_Salesarea->Kelurahan(),
+            'salesarea' => $this->M_Salesarea->MSalesarea($this->result[0]->nik)
+        ];
         $data['content'] = $this->load->view('V_Salesarea', $data, true);
         $this->load->view('template', $data);
     }

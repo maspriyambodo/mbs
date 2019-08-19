@@ -2,11 +2,8 @@
     <h4 class="text-uppercase"><?= date("25/m/Y", strtotime("-1 month")) . " - " . date("d/m/Y"); ?></h4>
 </div>
 <table class="table table-bordered table-hover table-striped" style="width:100%;">
-    <thead style="background-color:orange;">
+    <thead>
         <tr>
-            <th class="text-center text-uppercase">
-                NO
-            </th>
             <th class="text-center text-uppercase">
                 NAMA
             </th>
@@ -24,9 +21,6 @@
     <tbody>
         <?php foreach ($tot as $tot) { ?>
             <tr>
-                <td class="text-center text-uppercase">
-                    <?= $tot->norut ?>
-                </td>
                 <td>
                     <?= $tot->nama_karyawan ?>
                 </td>

@@ -48,13 +48,11 @@ class M_Caridata extends CI_Model {
     }
 
     function Simpan($data) {
-        $nopen = explode(" ", $data);
-        $tot = count($nopen);
         $i = 0;
-        while ($i < $tot) {
+        while ($i < count($data)) {
             $exec = [
                 'nik' => $this->result[0]->nik,
-                'nopen' => $nopen[$i],
+                'nopen' => $data[$i],
                 'visit_status' => 1,
                 'syscreatedate' => date("Y-m-d H:i:s"),
                 'syscreateuser' => $this->result[0]->nik
@@ -66,17 +64,12 @@ class M_Caridata extends CI_Model {
         $this->db->insert_batch('lap_rencana', $insert);
         $this->db->trans_complete();
         if ($this->db->trans_status() === FALSE) {
-            $response = array('status' => 'error', 'msg' => 'error, data gagal disimpan, silahkan coba lagi !');
+            $this->db->trans_rollback();
+            echo '<script>alert("Error, error while saving data !");window.location.href="' . base_url('Sales/Caridata/index') . '"</script>';
         } else {
             $this->db->trans_commit();
-            $response = array('status' => 'success', 'msg' => 'success, data berhasil disimpan !');
+            echo '<script>alert("Success, data success  !");window.location.href="' . base_url('Sales/Daftarkunjungan/index') . '"</script>';
         }
-        $this->output
-                ->set_status_header(200)
-                ->set_content_type('application/json', 'utf-8')
-                ->set_output(json_encode($response, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES))
-                ->_display();
-        exit;
     }
 
     function Kabupaten($value) {
@@ -126,7 +119,7 @@ class M_Caridata extends CI_Model {
     }
 
     function Hasil($cari) {
-        $exec = $this->db->select('mst_datapens.kelurahan,mst_datapens.kecamatan,mst_datapens.kota_kab,mst_datapens.provinsi,mst_datapens.alm_peserta,mst_datapens.nama_penerima,mst_datapens.tgl_lahir_pensiunan,mst_datapens.tgl_lahir_penerima,mst_datapens.namapensiunan')
+        $exec = $this->db->select('mst_datapens.kelurahan,mst_datapens.notas,mst_datapens.kecamatan,mst_datapens.kota_kab,mst_datapens.provinsi,mst_datapens.alm_peserta,mst_datapens.nama_penerima,mst_datapens.tgl_lahir_pensiunan,mst_datapens.tgl_lahir_penerima,mst_datapens.namapensiunan')
                 ->from('`mst_datapens`')
                 ->where(' NOT EXISTS ( SELECT lap_rencana.nopen FROM lap_rencana WHERE mst_datapens.notas = lap_rencana.nopen )')
                 ->where('YEAR ( CURDATE( ) ) - YEAR ( tgl_lahir_pensiunan ) BETWEEN 74 AND 80 ')

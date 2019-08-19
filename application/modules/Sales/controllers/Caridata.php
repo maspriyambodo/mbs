@@ -26,7 +26,7 @@ class Caridata extends CI_Controller {
     }
 
     function Getdata() {
-        $cari=['provinsi'=>str_replace("+"," ",$this->uri->segment(4,0)),'kabupaten'=>str_replace("+"," ",$this->uri->segment(5,0)),'kecamatan'=>str_replace("+"," ",$this->uri->segment(6,0)),'kelurahan'=>str_replace("+"," ",$this->uri->segment(7,0))];
+        $cari = ['provinsi' => str_replace("+", " ", $this->uri->segment(4, 0)), 'kabupaten' => str_replace("+", " ", $this->uri->segment(5, 0)), 'kecamatan' => str_replace("+", " ", $this->uri->segment(6, 0)), 'kelurahan' => str_replace("+", " ", $this->uri->segment(7, 0))];
         $data = [
             'title' => 'MARKETING | ' . $this->result[0]->uname,
             'formtitle' => 'jumlah potensi tersedia',
@@ -42,7 +42,7 @@ class Caridata extends CI_Controller {
     }
 
     function Simpan() {
-        $nopen = $this->input->post('hasil');
+        $nopen = $this->input->post('notas');
         $this->M_Caridata->Simpan($nopen);
     }
 

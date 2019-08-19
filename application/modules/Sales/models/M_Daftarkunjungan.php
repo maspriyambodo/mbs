@@ -6,9 +6,9 @@ class M_Daftarkunjungan extends CI_Model {
 
     function index($result) {
         $exec = $this->db->distinct()
-                ->select('mst_datapens.NAMAPENSIUNAN,mst_datapens.TGL_LAHIR_PENSIUNAN,mst_datapens.NAMA_PENERIMA,mst_datapens.TGL_LAHIR_PENERIMA,mst_datapens.ALM_PESERTA,mst_datapens.KELURAHAN,mst_datapens.KECAMATAN,mst_datapens.KOTA_KAB,mst_datapens.PROVINSI,mst_datapens.NOTAS')
+                ->select('mst_datapens.namapensiunan,mst_datapens.tgl_lahir_pensiunan,mst_datapens.nama_penerima,mst_datapens.tgl_lahir_penerima,mst_datapens.alm_peserta,mst_datapens.kelurahan,mst_datapens.kecamatan,mst_datapens.kota_kab,mst_datapens.provinsi,mst_datapens.notas')
                 ->from('mst_datapens')
-                ->join('lap_rencana', 'mst_datapens.NOTAS = lap_rencana.nopen', 'LEFT')
+                ->join('lap_rencana', 'mst_datapens.notas = lap_rencana.nopen', 'LEFT')
                 ->where('lap_rencana.nik', $result[0]->nik)
                 ->where('lap_rencana.visit_status', 1)
                 ->where('DATE(lap_rencana.syscreatedate)', date("Y-m-d"))

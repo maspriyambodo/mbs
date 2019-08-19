@@ -26,28 +26,28 @@ if ($hitung[0]->nopen >= 15) {
             <?php foreach ($Value as $Value) { ?>
                 <tr>
                     <td>
-                        <?= $Value->NAMAPENSIUNAN; ?>
+                        <?= $Value->namapensiunan; ?>
                     </td>
                     <td class="text-center">
                         <?php
                         $now = new DateTime();
-                        $dob = new DateTime(date($Value->TGL_LAHIR_PENSIUNAN));
+                        $dob = new DateTime(date($Value->tgl_lahir_pensiunan));
                         $age = $now->diff($dob);
                         echo $age->y;
                         ?>
                     </td>
-                    <td><?= $Value->NAMA_PENERIMA; ?></td>
+                    <td><?= $Value->nama_penerima; ?></td>
                     <td class="text-center">
                         <?php
                         $now1 = new DateTime();
-                        $dob1 = new DateTime(date($Value->TGL_LAHIR_PENERIMA));
+                        $dob1 = new DateTime(date($Value->tgl_lahir_penerima));
                         $age1 = $now1->diff($dob1);
                         echo $age1->y;
                         ?>
                     </td>
-                    <td><?= $Value->ALM_PESERTA . ', KEL. ' . $Value->KELURAHAN . ', KEC. ' . $Value->KECAMATAN . ', KAB. ' . $Value->KOTA_KAB . ", PROV. " . $Value->PROVINSI; ?></td>
+                    <td><?= $Value->alm_peserta . ', KEL. ' . $Value->kelurahan . ', KEC. ' . $Value->kecamatan . ', KAB. ' . $Value->kota_kab . ", PROV. " . $Value->provinsi; ?></td>
                     <td class="text-center">
-                        <a href="<?= base_url('Sales/Interaksi/index/' . $Value->NOTAS . ''); ?>" class="btn btn-xs"><i class="fa fa-edit"></i> Interaksi </a>
+                        <a href="<?= base_url('Sales/Interaksi/index/' . $Value->notas . ''); ?>" class="btn btn-xs"><i class="fa fa-edit"></i> Interaksi </a>
                     </td>
                 </tr>
             <?php } ?>

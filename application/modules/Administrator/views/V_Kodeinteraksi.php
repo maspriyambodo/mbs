@@ -11,7 +11,7 @@
                 <th class="text-center text-uppercase">
                     keterangan
                 </th>
-                <th class="text-center text-uppercase">
+                <th class="text-center text-uppercase no-print">
                     actions
                 </th>
             </tr>
@@ -28,7 +28,7 @@
                     <td>
                         <?= $kodeint->keterangan ?>
                     </td>
-                    <td class="text-center">
+                    <td class="text-center no-print">
                         <button data-toggle="modal" data-target="#myModal" class="btn btn-xs btn-default btn-warning" onclick="editbtn('<?= $kodeint->kode_kunjungan ?>')"><i class="glyphicon glyphicon-edit"></i></button>
                         <a href="#" class="btn btn-xs btn-default btn-danger"><i class="glyphicon glyphicon-trash"></i></a>
                     </td>
@@ -65,9 +65,63 @@
     window.onload = function () {
         $('table').dataTable({
             dom: 'Blftipr',
-            buttons: [
-                'colvis', 'copy', 'excel', 'pdf', 'print'
-            ],
+            buttons: {
+                buttons: [
+                    {
+                        extend: 'colvis'
+                    },
+                    {
+                        extend: 'print',
+                        messageBottom: '<i>* The information in this table is copyright to PT Marsit Bangun Sejahtera</i>',
+                        text: '<i class="fa fa-print"></i> Print',
+                        title: 'Master data kode interaksi',
+                        pageSize: 'A4',
+                        customize: function (win) {
+                            $(win.document.body).append('<div style="clear:both;margin:10% 0px"></div><div class="row"><div class="col-md-4"></div><div class="col-md-4"></div><div class="col-md-4"><div style="clear:both;margin:10px 0px"><p class="text-center"> Jakarta, <?= date("d F Y"); ?></p></div></div></div><div class="row"><div class="col-md-4"><div class="text-center"><p class="text-uppercase"> disetujui oleh</p><div style="margin:100px 0px"></div><p class="text-uppercase"> ( MARULI TUA H. SITOHANG, SE. MM )</p></div></div><div class="col-md-4"><div class="text-center"><p class="text-uppercase"> diperiksa oleh</p><div style="margin:100px 0px"></div><p class="text-uppercase"> ( M. BRIAN A )</p></div></div><div class="col-md-4"><div class="text-center"><p class="text-uppercase"> dibuat oleh</p><div style="margin:100px 0px;margin-right:50%;"></div><p class="text-uppercase"> ( <?= $this->session->userdata('nama'); ?> )</p></div></div></div>');
+                            $(win.document.body).find('h1').css('text-align', 'center');
+                            $(win.document.body).find('h1').css('font-size', '12pt');
+                            $(win.document.body).find('th').addClass('display').css('text-align', 'center');
+                            $(win.document.body).css('font-size', '12pt');
+                            $(win.document.body).css('background-color', 'white');
+                        },
+                        exportOptions: {
+                            columns: ':not(.no-print)'
+                        },
+                        footer: true,
+                        autoPrint: true
+                    },
+                    {
+                        extend: 'pdf',
+                        messageBottom: '<i>* The information in this table is copyright to PT Marsit Bangun Sejahtera</i>',
+                        text: '<i class="fa fa-file-pdf-o"></i> PDF',
+                        title: 'Master data kode interaksi',
+                        exportOptions: {
+                            columns: ':not(.no-print)'
+                        },
+                        footer: true
+                    },
+                    {
+                        extend: 'copy',
+                        messageBottom: '<i>* The information in this table is copyright to PT Marsit Bangun Sejahtera</i>',
+                        text: '<i class="fa fa-files-o"></i> Copy',
+                        title: 'Master data kode interaksi',
+                        exportOptions: {
+                            columns: ':not(.no-print)'
+                        },
+                        footer: true
+                    },
+                    {
+                        extend: 'excel',
+                        messageBottom: '<i>* The information in this table is copyright to PT Marsit Bangun Sejahtera</i>',
+                        text: '<i class="fa fa-file-excel-o"></i> Excel  ',
+                        title: 'Master data kode interaksi',
+                        exportOptions: {
+                            columns: ':not(.no-print)'
+                        },
+                        footer: true
+                    }
+                ]
+            },
             responsive: true,
             "paging": true,
             "ordering": true,

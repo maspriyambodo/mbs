@@ -23,7 +23,7 @@
                 <th class="text-center text-uppercase">
                     kelurahan
                 </th>
-                <th class="text-center text-uppercase">
+                <th class="text-center text-uppercase no-print">
                     actions
                 </th>
             </tr>
@@ -37,7 +37,7 @@
                     <td><?= $salesarea->kabupaten ?></td>
                     <td><?= $salesarea->kecamatan ?></td>
                     <td><?= $salesarea->kelurahan ?></td>
-                    <td class="text-center text-uppercase">
+                    <td class="text-center text-uppercase no-print">
                         <button data-toggle="modal" data-target="#myModal" class="btn btn-xs btn-warning" onclick="editbtn(<?= $salesarea->id ?>)"><i class="glyphicon glyphicon-edit"></i> edit</button>
                     </td>
                 </tr>
@@ -128,7 +128,55 @@
     window.onload = function () {
         $('.table').DataTable({
             dom: 'Blfrtip',
-            responsive: true
+            responsive: true,
+            buttons: {
+                buttons: [{
+                        extend: 'print',
+                        messageTop: '<h1>Laporan Sales Area </h1>',
+                        messageBottom: '<i>* The information in this table is copyright to PT Marsit Bangun Sejahtera</i>',
+                        text: '<i class="fa fa-print"></i> Print',
+                        title: $('h1').text(),
+                        exportOptions: {
+                            columns: ':not(.no-print)'
+                        },
+                        footer: true,
+                        autoPrint: true
+                    },
+                    {
+                        extend: 'pdf',
+                        messageTop: '<h1>Laporan Sales Area </h1>',
+                        messageBottom: '<i>* The information in this table is copyright to PT Marsit Bangun Sejahtera</i>',
+                        text: '<i class="fa fa-file-pdf-o"></i> PDF',
+                        title: $('h1').text(),
+                        exportOptions: {
+                            columns: ':not(.no-print)'
+                        },
+                        footer: true
+                    },
+                    {
+                        extend: 'copy',
+                        messageTop: '<h1>Laporan Sales Area </h1>',
+                        messageBottom: '<i>* The information in this table is copyright to PT Marsit Bangun Sejahtera</i>',
+                        text: '<i class="fa fa-files-o"></i> Copy',
+                        title: $('h1').text(),
+                        exportOptions: {
+                            columns: ':not(.no-print)'
+                        },
+                        footer: true
+                    },
+                    {
+                        extend: 'excel',
+                        messageTop: '<h1>Laporan Sales Area </h1>',
+                        messageBottom: '<i>* The information in this table is copyright to PT Marsit Bangun Sejahtera</i>',
+                        text: '<i class="fa fa-file-excel-o"></i> Excel  ',
+                        title: $('h1').text(),
+                        exportOptions: {
+                            columns: ':not(.no-print)'
+                        },
+                        footer: true
+                    }
+                ]
+            }
         });
     };
     function addbtn() {

@@ -18,8 +18,7 @@ class M_User extends CI_Model {
         $this->db->cache_on();
         $exec = $this->db->select('usr_adm.id, usr_adm.uname, usr_adm.usr_mail, usr_adm.hak_akses,usr_adm.nik, usr_adm.pict')
                 ->from('usr_adm')
-                ->where('usr_adm.uname', $data['uname'])
-                ->where('usr_adm.nik', $data['pwd'])
+                ->where(['usr_adm.uname' => $data['uname'], 'usr_adm.pwd' => sha1($data['pwd'])])
                 ->limit(1)
                 ->get();
         if ($exec->num_rows() == 1) {

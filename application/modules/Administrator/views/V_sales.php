@@ -1,4 +1,9 @@
 <div class="table-responsive">
+    <div class="form-group">
+        <div class="text-right">
+            <a href="<?= base_url('Administrator/Sales/Tambah'); ?>" class="btn btn-default btn-primary text-uppercase"><i class="glyphicon glyphicon-plus"></i> tambah</a>
+        </div>
+    </div>
     <table class="table table-bordered table-striped table-hover" style="width:100%;">
         <thead>
             <tr>
@@ -17,7 +22,7 @@
                 <th class="text-uppercase text-center">
                     ALAMAT
                 </th>
-                <th class="text-uppercase text-center">
+                <th class="text-uppercase text-center no-print">
                     action
                 </th>
             </tr>
@@ -40,7 +45,7 @@
                     <td>
                         <?= $sales->alamat . "kel. " . $sales->kelurahan . "kec. " . $sales->kecamatan . "kota/kab " . $sales->kota ?>
                     </td>
-                    <td class="text-center">
+                    <td class="text-center no-print">
                         <a href="<?= base_url('administrator/sales/ubah/' . $sales->nik . ''); ?>" class="btn btn-warning btn-xs"><i class="glyphicon glyphicon-pencil"></i></a>
                         <button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#myModal"  onclick="hapusbtn('<?= $sales->nama_karyawan ?>', '<?= $sales->nik ?>')">
                             <i class="glyphicon glyphicon-trash"></i>
@@ -102,33 +107,63 @@
         $('.table').DataTable({
             "lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
             dom: 'lBfrtip',
-            buttons: [
-                {
-                    extend: 'copyHtml5', footer: true
-                },
-                {
-                    extend: 'excelHtml5', footer: true
-                },
-                {
-                    extend: 'csvHtml5', footer: true
-                },
-                {
-                    extend: 'pdfHtml5', footer: true
-                },
-                {
-                    extend: 'print',
-                    title: "DATA SALES",
-                    pageSize: 'A4',
-                    customize: function (win) {
-                        $(win.document.body).append('<div style="clear:both;margin:10% 0px"></div><div class="row"><div class="col-md-4"></div><div class="col-md-4"></div><div class="col-md-4"><div style="clear:both;margin:10px 0px"><p class="text-center"> Jakarta, <?= date("d F Y"); ?></p></div></div></div><div class="row"><div class="col-md-4"><div class="text-center"><p class="text-uppercase"> disetujui oleh</p><div style="margin:100px 0px"></div><p class="text-uppercase"> ( MARULI TUA H. SITOHANG, SE. MM )</p></div></div><div class="col-md-4"><div class="text-center"><p class="text-uppercase"> diperiksa oleh</p><div style="margin:100px 0px"></div><p class="text-uppercase"> ( M. BRIAN A )</p></div></div><div class="col-md-4"><div class="text-center"><p class="text-uppercase"> dibuat oleh</p><div style="margin:100px 0px;margin-right:50%;"></div><p class="text-uppercase"> ( <?= $this->session->userdata('nama'); ?> )</p></div></div></div>');
-                        $(win.document.body).find('h1').css('text-align', 'center');
-                        $(win.document.body).find('h1').css('font-size', '12pt');
-                        $(win.document.body).find('th').addClass('display').css('text-align', 'center');
-                        $(win.document.body).css('font-size', '12pt');
-                        $(win.document.body).css('background-color', 'white');
+            buttons: {
+                buttons: [
+                    {
+                        extend: 'colvis'
+                    },
+                    {
+                        extend: 'print',
+                        messageBottom: '<i>* The information in this table is copyright to PT Marsit Bangun Sejahtera</i>',
+                        text: '<i class="fa fa-print"></i> Print',
+                        title: 'Master data sales',
+                        pageSize: 'A4',
+                        customize: function (win) {
+                            $(win.document.body).append('<div style="clear:both;margin:10% 0px"></div><div class="row"><div class="col-md-4"></div><div class="col-md-4"></div><div class="col-md-4"><div style="clear:both;margin:10px 0px"><p class="text-center"> Jakarta, <?= date("d F Y"); ?></p></div></div></div><div class="row"><div class="col-md-4"><div class="text-center"><p class="text-uppercase"> disetujui oleh</p><div style="margin:100px 0px"></div><p class="text-uppercase"> ( MARULI TUA H. SITOHANG, SE. MM )</p></div></div><div class="col-md-4"><div class="text-center"><p class="text-uppercase"> diperiksa oleh</p><div style="margin:100px 0px"></div><p class="text-uppercase"> ( M. BRIAN A )</p></div></div><div class="col-md-4"><div class="text-center"><p class="text-uppercase"> dibuat oleh</p><div style="margin:100px 0px;margin-right:50%;"></div><p class="text-uppercase"> ( <?= $this->session->userdata('nama'); ?> )</p></div></div></div>');
+                            $(win.document.body).find('h1').css('text-align', 'center');
+                            $(win.document.body).find('h1').css('font-size', '12pt');
+                            $(win.document.body).find('th').addClass('display').css('text-align', 'center');
+                            $(win.document.body).css('font-size', '12pt');
+                            $(win.document.body).css('background-color', 'white');
+                        },
+                        exportOptions: {
+                            columns: ':not(.no-print)'
+                        },
+                        footer: true,
+                        autoPrint: true
+                    },
+                    {
+                        extend: 'pdf',
+                        messageTop: '<h1>Master data sales </h1>',
+                        messageBottom: '<i>* The information in this table is copyright to PT Marsit Bangun Sejahtera</i>',
+                        text: '<i class="fa fa-file-pdf-o"></i> PDF',
+                        exportOptions: {
+                            columns: ':not(.no-print)'
+                        },
+                        footer: true
+                    },
+                    {
+                        extend: 'copy',
+                        messageTop: '<h1>Master data sales </h1>',
+                        messageBottom: '<i>* The information in this table is copyright to PT Marsit Bangun Sejahtera</i>',
+                        text: '<i class="fa fa-files-o"></i> Copy',
+                        exportOptions: {
+                            columns: ':not(.no-print)'
+                        },
+                        footer: true
+                    },
+                    {
+                        extend: 'excel',
+                        messageTop: '<h1>Master data sales </h1>',
+                        messageBottom: '<i>* The information in this table is copyright to PT Marsit Bangun Sejahtera</i>',
+                        text: '<i class="fa fa-file-excel-o"></i> Excel  ',
+                        exportOptions: {
+                            columns: ':not(.no-print)'
+                        },
+                        footer: true
                     }
-                }
-            ],
+                ]
+            },
             responsive: true
         });
     };

@@ -14,8 +14,8 @@
             </div>
             <div class="form-group">
                 <label class="text-uppercase">tanggal pencairan</label>
-                <div class="input-group date">
-                    <input name="tglcairtxt" type="text" data-provide="datepicker" class="form-control"  required="" readonly="readonly" data-date-format="yyyy-mm-dd"/>
+                <div class="input-group date" id="tglcairtxt">
+                    <input name="tglcairtxt" type="text" data-provide="datepicker" class="form-control" required=""/>
                     <div class="input-group-addon">
                         <span class="glyphicon glyphicon-calendar"></span>
                     </div>
@@ -74,6 +74,11 @@
     };
     window.onload = function () {
         $("input[name=plaftxt]").number(true, 0);
+        $('#tglcairtxt').datetimepicker({
+        format: 'YYYY-MM-DD',
+        ignoreReadonly: true,
+        allowInputToggle: true
+    });
     };
     function simpan() {
         var b, c, d;

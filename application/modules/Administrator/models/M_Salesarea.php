@@ -12,8 +12,6 @@ class M_Salesarea extends CI_Model {
                 ->join('mst_karyawan', 'usr_adm.nik = mst_karyawan.nik', 'left')
                 ->where('usr_adm.hak_akses', 10)
                 ->where('mst_karyawan.`status`', 1)
-                ->or_where('usr_adm.hak_akses', 3)
-                ->where('mst_karyawan.`status`', 1)
                 ->get()
                 ->result();
         return $exec;

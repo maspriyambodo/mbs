@@ -12,7 +12,25 @@ class M_Salary extends CI_Model {
             $between = date("Y") . '-' . date("m", strtotime("-1 month")) . '-25';
             $between1 = date("Y") . '-' . date("m") . '-24';
         }
-        $exec = $this->db->query('select norut.norut,mst_karyawan.nama_karyawan as uname,lokasi_kerja,mst_karyawan.penpok,t_gaji.limit1 ,t_gaji.persen1,t_gaji.limit2,t_gaji.persen2,t_gaji.limit3,t_gaji.persen3, ( select sum( nom_tb) from lap_interaksi where usr_adm.nik = lap_interaksi.nik and lap_interaksi.syscreatedate between "' . date("y") . '-' . date("m", strtotime("- 1 month ")) . '-25" and "' . date("y") . '-' . date("m") . '-24" ) as plaf,( select count( *) from lap_rencana where usr_adm.nik = lap_rencana.nik and lap_interaksi.syscreatedate between "' . date("y") . '-' . date("m", strtotime("- 1 month ")) . '-25" and "' . date("y") . '-' . date("m") . '-24" ) as ri, ( select count( * ) from lap_interaksi where usr_adm.nik = lap_interaksi.nik and lap_interaksi.syscreatedate between "' . date("y") . '-' . date("m", strtotime("- 1 month ")) . '-25" and "' . date("y") . '-' . date("m") . '-24" ) as hi, ( select count( hp_status ) from lap_interaksi where usr_adm.nik = lap_interaksi.nik and lap_interaksi.hp_status = "y" and lap_interaksi.syscreatedate between "' . date("y") . '-' . date("m", strtotime("- 1 month ")) . '-25" and "' . date("y") . '-' . date("m") . '-24" ) as hp from norut left join usr_adm on norut.nik = usr_adm.nik left join mst_karyawan on norut.nik = mst_karyawan.nik left join lap_interaksi on norut.nik = lap_interaksi.nik left join lap_rencana on norut.nik = lap_rencana.nik left join t_gaji on norut.nik = t_gaji.nik  group by norut.nik order by norut.norut asc');
+//        $exec = $this->db->query('select norut.norut,mst_karyawan.nama_karyawan as uname,lokasi_kerja,mst_karyawan.penpok,t_gaji.limit1 ,t_gaji.persen1,t_gaji.limit2,t_gaji.persen2,t_gaji.limit3,t_gaji.persen3, ( select sum( nom_tb) from lap_interaksi where usr_adm.nik = lap_interaksi.nik and lap_interaksi.syscreatedate between "' . date("y") . '-' . date("m", strtotime("- 1 month ")) . '-25" and "' . date("y") . '-' . date("m") . '-24" ) as plaf,( select count( *) from lap_rencana where usr_adm.nik = lap_rencana.nik and lap_interaksi.syscreatedate between "' . date("y") . '-' . date("m", strtotime("- 1 month ")) . '-25" and "' . date("y") . '-' . date("m") . '-24" ) as ri, ( select count( * ) from lap_interaksi where usr_adm.nik = lap_interaksi.nik and lap_interaksi.syscreatedate between "' . date("y") . '-' . date("m", strtotime("- 1 month ")) . '-25" and "' . date("y") . '-' . date("m") . '-24" ) as hi, ( select count( hp_status ) from lap_interaksi where usr_adm.nik = lap_interaksi.nik and lap_interaksi.hp_status = "y" and lap_interaksi.syscreatedate between "' . date("y") . '-' . date("m", strtotime("- 1 month ")) . '-25" and "' . date("y") . '-' . date("m") . '-24" ) as hp from norut left join usr_adm on norut.nik = usr_adm.nik left join mst_karyawan on norut.nik = mst_karyawan.nik left join lap_interaksi on norut.nik = lap_interaksi.nik left join lap_rencana on norut.nik = lap_rencana.nik left join t_gaji on norut.nik = t_gaji.nik  group by norut.nik order by norut.norut asc');
+        $exec = $this->db->select('mst_karyawan.nama_karyawan AS uname,lokasi_kerja,mst_karyawan.penpok,t_gaji.limit1,t_gaji.persen1,t_gaji.limit2,t_gaji.persen2,t_gaji.limit3,t_gaji.persen3')
+                ->select('( SELECT sum( nom_tb) FROM lap_interaksi WHERE usr_adm.nik = lap_interaksi.nik AND lap_interaksi.syscreatedate BETWEEN "' . date("y") . '-' . date("m", strtotime("- 1 month ")) . '-25" and "' . date("y") . '-' . date("m") . '-24" ) AS plaf')
+                ->select('( SELECT count( *) FROM lap_rencana WHERE usr_adm.nik = lap_rencana.nik AND lap_interaksi.syscreatedate BETWEEN "' . date("y") . '-' . date("m", strtotime("- 1 month ")) . '-25" and "' . date("y") . '-' . date("m") . '-24") AS ri')
+                ->select('( SELECT count( *) FROM lap_interaksi WHERE usr_adm.nik = lap_interaksi.nik AND lap_interaksi.syscreatedate BETWEEN "' . date("y") . '-' . date("m", strtotime("- 1 month ")) . '-25" and "' . date("y") . '-' . date("m") . '-24" ) AS hi')
+                ->select('( SELECT count( hp_status) FROM lap_interaksi WHERE usr_adm.nik = lap_interaksi.nik AND lap_interaksi.hp_status = "y" AND lap_interaksi.syscreatedate BETWEEN "' . date("y") . '-' . date("m", strtotime("- 1 month ")) . '-25" and "' . date("y") . '-' . date("m") . '-24" ) AS hp')
+                ->from('usr_adm')
+                ->join('mst_karyawan', 'usr_adm.nik = mst_karyawan.nik', 'LEFT')
+                ->join('lap_interaksi', 'usr_adm.nik = lap_interaksi.nik', 'LEFT')
+                ->join('lap_rencana', 'usr_adm.nik = lap_rencana.nik', 'LEFT')
+                ->join('t_gaji', 'usr_adm.nik = t_gaji.nik', 'LEFT')
+                ->where('usr_adm.hak_akses', 10)
+                ->where('mst_karyawan.`status`', 1)
+                ->group_by('usr_adm.nik')
+                ->order_by('usr_adm.nik')
+                ->get()
+                ->result();
+//        print_r($this->db->last_query());
+//        die;
         return $exec;
     }
 

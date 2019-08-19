@@ -40,7 +40,7 @@
 <div style="clear:both;margin:50px 0px;"></div>
 <div class="table-responsive">
     <table class="table table-bordered table-striped table-hover">
-        <thead style="background-color:#f9a825;color:white">
+        <thead>
             <tr>
                 <th class="text-uppercase text-center">jangka waktu angsuran</th>
                 <th class="text-center"> 12 </th>

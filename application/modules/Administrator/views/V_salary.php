@@ -6,9 +6,6 @@
         <thead>
             <tr>
                 <th class="text-uppercase text-center">
-                    NO
-                </th>
-                <th class="text-uppercase text-center">
                     SALES
                 </th>
                 <th class="text-uppercase text-center">
@@ -26,11 +23,8 @@
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($reportmonthly->result() as $reportmonthly) { ?>
+            <?php foreach ($reportmonthly as $reportmonthly) { ?>
                 <tr>
-                    <td>
-                        <?= $reportmonthly->norut ?>
-                    </td>
                     <td class="text-uppercase">
                         <?= $reportmonthly->uname ?>
                     </td>

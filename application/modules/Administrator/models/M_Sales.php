@@ -8,10 +8,7 @@ class M_Sales extends CI_Model {
         $exec = $this->db->SELECT('upper(mst_karyawan.nama_karyawan) as nama_karyawan, mst_karyawan.nik, mst_karyawan.telepon1, mst_karyawan.telepon2, mst_karyawan.tgl_lahir, mst_karyawan.alamat, mst_karyawan.kelurahan, mst_karyawan.kecamatan, mst_karyawan.kota')
                 ->FROM('usr_adm')
                 ->join('mst_karyawan', 'usr_adm.nik = mst_karyawan.nik')
-                ->WHERE('mst_karyawan.status', 1)
-                ->WHERE('hak_akses', 10)
-                ->OR_WHERE('hak_akses', 3)
-                ->WHERE('mst_karyawan.status', 1)
+                ->WHERE(['mst_karyawan.status' => 1, 'hak_akses' => 10])
                 ->get()
                 ->result();
         return $exec;
@@ -20,19 +17,16 @@ class M_Sales extends CI_Model {
     function Details($nik) {
         $exec = $this->db->select('nik, nama_karyawan, jenis_kelamin, tgl_lahir, alamat, kelurahan, kecamatan, kota, kodepos, telepon1, telepon2, email, status_perkawinan, status_karyawan, tanggal_masuk, lokasi_kerja, format(mst_karyawan.penpok,0) as penpok')
                 ->from('mst_karyawan')
-                ->where('nik', $nik)
-                ->where('status', 1)
+                ->where(['nik' => $nik, 'status' => 1])
                 ->get()
                 ->result();
         return $exec;
     }
 
     function Datasales($data) {
-        $exec = $this->db->DISTINCT()
-                ->select('*')
+        $exec = $this->db->select()
                 ->FROM('usr_adm')
-                ->join('mst_karyawan', 'usr_adm.nik = mst_karyawan.nik')
-                ->join('norut', 'mst_karyawan.nik = norut.nik')
+                ->join(['mst_karyawan' => 'usr_adm.nik = mst_karyawan.nik', 'norut' => 'mst_karyawan.nik = norut.nik'])
                 ->WHERE('hak_akses', 10)
                 ->where('norut.spv', $data)
                 ->or_where('hak_akses', 3)
@@ -49,7 +43,7 @@ class M_Sales extends CI_Model {
         $this->db->query('insert into usr_adm ( usr_adm.nik, usr_adm.uname, usr_adm.usr_mail, usr_adm.hak_akses, usr_adm.pict ) values ( ' . $data['nik'] . ', "' . $data['nama_karyawan'] . '", "' . $data['email'] . '", 10, "assets\images\user\marketing.png" )');
         $this->db->query('insert into norut(`norut`, `nik`, `spv`) values (20, 14112018, 14112018)');
         $this->db->trans_complete();
-        if ($this->db->trans_status() === FALSE) {
+        if ($this->db->trans_status() === false) {
             $response = array('status' => 'error', 'msg' => 'data gagal disimpan !');
         } else {
             $response = array('status' => 'success', 'msg' => 'data berhasil disimpan :)');
@@ -60,6 +54,64 @@ class M_Sales extends CI_Model {
                 ->set_output(json_encode($response, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES))
                 ->_display();
         exit;
+    }
+
+    function Provinsi() {
+        $exec = $this->db->select('m_kodepos.provinsi')
+                ->from('m_kodepos')
+                ->group_by('m_kodepos.provinsi')
+                ->get()
+                ->result();
+        return $exec;
+    }
+
+    function Kabupaten($data) {
+        $exec = $this->db->select('m_kodepos.kabupaten')
+                ->from('m_kodepos')
+                ->where('m_kodepos.provinsi', $data)
+                ->group_by('m_kodepos.kabupaten')
+                ->order_by('m_kodepos.kabupaten', 'ASC')
+                ->get()
+                ->result();
+        $a[0] = array('kabupaten' => 'PILIH KABUPATEN');
+        $b = array_merge($a, $exec);
+        return $b;
+    }
+
+    function Getkecamatan($data) {
+        $exec = $this->db->select('m_kodepos.kecamatan')
+                ->from('m_kodepos')
+                ->where('m_kodepos.provinsi', $data['provinsi'])
+                ->where('m_kodepos.kabupaten', $data['kabupaten'])
+                ->group_by('m_kodepos.kecamatan')
+                ->order_by('m_kodepos.kecamatan', 'ASC')
+                ->get()
+                ->result();
+        $a[0] = array('kecamatan' => 'PILIH KECAMATAN');
+        $b = array_merge($a, $exec);
+        return $b;
+    }
+
+    function Getkelurahan($data) {
+        $exec = $this->db->select('m_kodepos.kelurahan')
+                ->from('m_kodepos')
+                ->where(['m_kodepos.provinsi' => $data['provinsi'], 'm_kodepos.kabupaten' => $data['kabupaten'], 'm_kodepos.kecamatan' => $data['kecamatan']])
+                ->group_by('m_kodepos.kelurahan')
+                ->order_by('m_kodepos.kelurahan', 'ASC')
+                ->get()
+                ->result();
+        $a[0] = array('kelurahan' => 'PILIH KELURAHAN');
+        $b = array_merge($a, $exec);
+        return $b;
+    }
+
+    function Getkodepos($data) {
+        $exec = $this->db->select('m_kodepos.kodepos')
+                ->from('m_kodepos')
+                ->where(['m_kodepos.provinsi' => $data['provinsi'], 'm_kodepos.kabupaten' => $data['kabupaten'], 'm_kodepos.kecamatan' => $data['kecamatan'], 'm_kodepos.kelurahan' => $data['kelurahan']])
+                ->get()
+                ->result();
+        return $exec;
     }
 
     function Hapus($id) {

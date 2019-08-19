@@ -5,7 +5,7 @@
                 <th class="text-center text-uppercase">provinsi</th>
                 <th class="text-center text-uppercase">kabupaten</th>
                 <th class="text-center text-uppercase">jumlah</th>
-                <th class="text-center text-uppercase">action</th>
+                <th class="text-center text-uppercase no-print">action</th>
             </tr>
         </thead>
         <tbody>
@@ -20,7 +20,7 @@
                     <td class="text-uppercase text-center">
                         <?= number_format($value->tot) ?>
                     </td>
-                    <td class="text-uppercase text-center">
+                    <td class="text-uppercase text-center no-print">
                         <a href="<?php
                         if ($value->kota_kab == '') {
                             $value->kota_kab = ' ';
@@ -43,9 +43,58 @@
     window.onload = function () {
         $('table').dataTable({
             dom: 'Blftipr',
-            buttons: [
-                'colvis', 'copy', 'excel', 'pdf', 'print'
-            ],
+            buttons: {
+                buttons: [
+                    {
+                        extend: 'colvis'
+                    },
+                    {
+                        extend: 'print',
+                        messageTop: '<h1>Master data pensiun </h1>',
+                        messageBottom: '<i>* The information in this table is copyright to PT Marsit Bangun Sejahtera</i>',
+                        text: '<i class="fa fa-print"></i> Print',
+                        title: $('h1').text(),
+                        exportOptions: {
+                            columns: ':not(.no-print)'
+                        },
+                        footer: true,
+                        autoPrint: true
+                    },
+                    {
+                        extend: 'pdf',
+                        messageTop: '<h1>Master data pensiun </h1>',
+                        messageBottom: '<i>* The information in this table is copyright to PT Marsit Bangun Sejahtera</i>',
+                        text: '<i class="fa fa-file-pdf-o"></i> PDF',
+                        title: $('h1').text(),
+                        exportOptions: {
+                            columns: ':not(.no-print)'
+                        },
+                        footer: true
+                    },
+                    {
+                        extend: 'copy',
+                        messageTop: '<h1>Master data pensiun </h1>',
+                        messageBottom: '<i>* The information in this table is copyright to PT Marsit Bangun Sejahtera</i>',
+                        text: '<i class="fa fa-files-o"></i> Copy',
+                        title: $('h1').text(),
+                        exportOptions: {
+                            columns: ':not(.no-print)'
+                        },
+                        footer: true
+                    },
+                    {
+                        extend: 'excel',
+                        messageTop: '<h1>Master data pensiun </h1>',
+                        messageBottom: '<i>* The information in this table is copyright to PT Marsit Bangun Sejahtera</i>',
+                        text: '<i class="fa fa-file-excel-o"></i> Excel  ',
+                        title: $('h1').text(),
+                        exportOptions: {
+                            columns: ':not(.no-print)'
+                        },
+                        footer: true
+                    }
+                ]
+            },
             responsive: true,
             "paging": true,
             "ordering": true,

@@ -22,7 +22,7 @@ class M_Dashboard extends CI_Model {
                 ->join('lap_rencana', 'usr_adm.nik = lap_rencana.nik', 'left')
                 ->join('lap_interaksi', 'usr_adm.nik = lap_interaksi.nik', 'left')
                 ->join('mst_karyawan', 'usr_adm.nik = mst_karyawan.nik', 'left')
-                ->where('usr_adm.hak_akses', 10)
+                ->where(['usr_adm.hak_akses' => 10, 'mst_karyawan.`status`' => 1])
                 ->group_by('usr_adm.nik')
                 ->get()
                 ->result();
